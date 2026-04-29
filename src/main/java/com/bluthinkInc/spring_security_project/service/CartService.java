@@ -19,26 +19,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CartServiceImpl {
+public class CartService {
     private final CartRepo cartRepo;
     private final CartItemRepo cartItemRepo;
     private final ProductRepo productRepo;
     private final UserRepo userRepo;
-    public CartServiceImpl(CartRepo cartRepo, CartItemRepo cartItemRepo,
-                           ProductRepo productRepo, UserRepo userRepo){
+    public CartService(CartRepo cartRepo, CartItemRepo cartItemRepo,
+                       ProductRepo productRepo, UserRepo userRepo){
         this.cartRepo = cartRepo;
         this.cartItemRepo = cartItemRepo;
         this.productRepo =productRepo;
         this.userRepo = userRepo;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
     public CartResponse addToCart(String name, Integer productId, Integer qty) {
         logger.info("Add to cart request received for user:{},productId:{},qty:{}",name,productId,qty);
         Users user = userRepo.findByName(name);
         if(user == null){
-            logger.warn("User not found with name:{}",name);
+            logger.warn("User not found with this name:{}",name);
             throw new UserNotFoundException("User not found");
         }
         Cart cart = cartRepo.findByUser(user)

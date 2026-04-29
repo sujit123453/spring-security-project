@@ -2,7 +2,7 @@ package com.bluthinkInc.spring_security_project.cartController;
 
 import com.bluthinkInc.spring_security_project.dto.CartResponse;
 import com.bluthinkInc.spring_security_project.model.Cart;
-import com.bluthinkInc.spring_security_project.service.CartServiceImpl;
+import com.bluthinkInc.spring_security_project.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class CartController {
-    private final CartServiceImpl cartService;
-    public CartController(CartServiceImpl cartService){
+    private final CartService cartService;
+    public CartController(CartService cartService){
         this.cartService = cartService;
     }
     @PostMapping("/cart/add")
