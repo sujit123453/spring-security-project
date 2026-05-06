@@ -14,6 +14,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/admin")
 public class AdminController {
 

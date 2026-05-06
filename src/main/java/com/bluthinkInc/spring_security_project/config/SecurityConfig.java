@@ -43,6 +43,7 @@ public class SecurityConfig {
 ////        return http.build();
 //
         return http
+                .cors(Customizer.withDefaults())
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, "/register", "/login", "/refresh_token")

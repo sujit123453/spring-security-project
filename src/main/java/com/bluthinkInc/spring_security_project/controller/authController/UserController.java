@@ -7,9 +7,7 @@ import com.bluthinkInc.spring_security_project.service.JWTService;
 import com.bluthinkInc.spring_security_project.service.RefreshTokenService;
 import com.bluthinkInc.spring_security_project.service.TokenBlacklistedService;
 import com.bluthinkInc.spring_security_project.service.UserService;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,7 +28,7 @@ public class UserController {
     private final TokenBlacklistedService tokenBlacklistedService;
 
     public UserController(UserService service, RefreshTokenService refreshTokenService,
-                          JWTService jwtService,TokenBlacklistedService tokenBlacklistedService){
+                          JWTService jwtService, TokenBlacklistedService tokenBlacklistedService) {
         this.service = service;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
