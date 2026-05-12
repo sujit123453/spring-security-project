@@ -104,6 +104,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>spring-security-project</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

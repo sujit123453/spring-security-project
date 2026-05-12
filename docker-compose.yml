@@ -1,0 +1,35 @@
+services:
+
+  app:
+    build: .
+    container_name: spring-security-app
+    restart: always
+
+    ports:
+      - "9090:9090"
+
+    depends_on:
+      - mysql-db
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/authentication-spring-boot
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Sujit@6299
+
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: Sujit@6299
+      MYSQL_DATABASE: authentication-spring-boot
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
