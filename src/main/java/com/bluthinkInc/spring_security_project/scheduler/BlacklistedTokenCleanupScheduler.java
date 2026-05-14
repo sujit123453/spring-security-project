@@ -1,8 +1,6 @@
 package com.bluthinkInc.spring_security_project.scheduler;
 
 import com.bluthinkInc.spring_security_project.repo.TokenBlacklistedRepo;
-import com.bluthinkInc.spring_security_project.service.TokenBlacklistedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

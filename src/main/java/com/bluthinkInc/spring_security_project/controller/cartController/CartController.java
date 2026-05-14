@@ -1,4 +1,4 @@
-package com.bluthinkInc.spring_security_project.cartController;
+package com.bluthinkInc.spring_security_project.controller.cartController;
 
 import com.bluthinkInc.spring_security_project.dto.CartResponse;
 import com.bluthinkInc.spring_security_project.model.Cart;

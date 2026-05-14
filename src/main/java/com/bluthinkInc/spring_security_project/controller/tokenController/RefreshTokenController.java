@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RefreshTokenController {
-    private JWTService jwtService;
+    private final JWTService jwtService;
     public RefreshTokenController(JWTService jwtService){
         this.jwtService = jwtService;
     }

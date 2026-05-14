@@ -1,8 +1,10 @@
 package com.bluthinkInc.spring_security_project.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.http.HttpStatusCode;
 
 @Entity
 @AllArgsConstructor

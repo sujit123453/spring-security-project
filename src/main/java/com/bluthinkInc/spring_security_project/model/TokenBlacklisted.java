@@ -19,6 +19,8 @@ public class TokenBlacklisted {
     private String token;
     private LocalDateTime expiration;
 
+    public TokenBlacklisted(){}
+
     public TokenBlacklisted(String token, LocalDateTime expiration) {
         this.token = token;
         this.expiration = expiration;

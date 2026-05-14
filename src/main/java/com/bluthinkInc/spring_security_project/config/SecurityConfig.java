@@ -1,7 +1,6 @@
 package com.bluthinkInc.spring_security_project.config;
 
-import com.bluthinkInc.spring_security_project.service.MyUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bluthinkInc.spring_security_project.service.impl.MyUserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,9 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final MyUserDetailsService userDetailsService;
+    private final MyUserDetailsServiceImpl userDetailsService;
     private final JwtFilter jwtFilter;
-    public SecurityConfig(MyUserDetailsService userDetailsService,JwtFilter jwtFilter){
+    public SecurityConfig(MyUserDetailsServiceImpl userDetailsService, JwtFilter jwtFilter){
         this.userDetailsService = userDetailsService;
         this.jwtFilter = jwtFilter;
     }
@@ -46,6 +45,11 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(
+                                "/swagger-ui/***",
+                                "/v3/api-docs/***",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/register", "/login", "/refresh_token")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")

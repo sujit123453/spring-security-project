@@ -1,8 +1,7 @@
-package com.bluthinkInc.spring_security_project.service;
+package com.bluthinkInc.spring_security_project.service.impl;
 
 import com.bluthinkInc.spring_security_project.model.Users;
 import com.bluthinkInc.spring_security_project.repo.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsServiceImpl implements UserDetailsService {
     private final UserRepo repo;
-    public MyUserDetailsService(UserRepo repo){
+    public MyUserDetailsServiceImpl(UserRepo repo){
         this.repo = repo;
     }
 

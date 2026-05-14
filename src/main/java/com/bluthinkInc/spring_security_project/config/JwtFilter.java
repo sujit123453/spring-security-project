@@ -1,14 +1,12 @@
 package com.bluthinkInc.spring_security_project.config;
 
-import com.bluthinkInc.spring_security_project.repo.TokenBlacklistedRepo;
 import com.bluthinkInc.spring_security_project.service.JWTService;
-import com.bluthinkInc.spring_security_project.service.MyUserDetailsService;
 import com.bluthinkInc.spring_security_project.service.TokenBlacklistedService;
+import com.bluthinkInc.spring_security_project.service.impl.MyUserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,12 +24,14 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
     ApplicationContext context;
     private final TokenBlacklistedService tokenBlacklistedService;
-    public JwtFilter(JWTService jwtService,ApplicationContext context
-                     ,TokenBlacklistedService tokenBlacklistedService) {
+
+    public JwtFilter(JWTService jwtService, ApplicationContext context
+            , TokenBlacklistedService tokenBlacklistedService) {
         this.jwtService = jwtService;
         this.context = context;
         this.tokenBlacklistedService = tokenBlacklistedService;
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hayIsImlhdCI6MTc3NjMyMjA5MywiZXhwIjoxNzc2MzIzODkzfQ.W0uwXpvgQquIv7KG0aP6NnC0eOFReRIBpdbdeYeYbQo
@@ -64,11 +64,11 @@ public class JwtFilter extends OncePerRequestFilter {
             //check token type
             String type = jwtService.extractTokenType(token);
 
-            if (!"access_token".equals(type)){
+            if (!"access_token".equals(type)) {
                 throw new RuntimeException("Invalid token! please enter correct access token");
             }
 
-            UserDetails userDetails = context.getBean(MyUserDetailsService.class)
+            UserDetails userDetails = context.getBean(MyUserDetailsServiceImpl.class)
                     .loadUserByUsername(username);
             if (jwtService.validateToken(token, userDetails)) {
                 String role = jwtService.extractRole(token);
