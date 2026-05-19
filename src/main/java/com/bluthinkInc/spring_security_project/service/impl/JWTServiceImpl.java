@@ -5,15 +5,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,16 +19,11 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
-    private String secretKey = "";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    public JWTServiceImpl() {
-        try {
-            KeyGenerator key = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = key.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+    public SecretKey keyword() {
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
 
@@ -58,10 +50,7 @@ public class JWTServiceImpl implements JWTService {
                 .compact();
     }
 
-    public SecretKey keyword() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
+
 
     public String extractUserName(String token) {
         //extract username from token

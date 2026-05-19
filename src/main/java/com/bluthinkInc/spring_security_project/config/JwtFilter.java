@@ -1,8 +1,10 @@
 package com.bluthinkInc.spring_security_project.config;
 
 import com.bluthinkInc.spring_security_project.service.JWTService;
+import com.bluthinkInc.spring_security_project.service.RedisTokenService;
 import com.bluthinkInc.spring_security_project.service.TokenBlacklistedService;
 import com.bluthinkInc.spring_security_project.service.impl.MyUserDetailsServiceImpl;
+import com.bluthinkInc.spring_security_project.service.impl.RedisTokenServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +26,14 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
     ApplicationContext context;
     private final TokenBlacklistedService tokenBlacklistedService;
+    private final RedisTokenService redisTokenService;
 
     public JwtFilter(JWTService jwtService, ApplicationContext context
-            , TokenBlacklistedService tokenBlacklistedService) {
+            , TokenBlacklistedService tokenBlacklistedService,RedisTokenService redisTokenService) {
         this.jwtService = jwtService;
         this.context = context;
         this.tokenBlacklistedService = tokenBlacklistedService;
+        this.redisTokenService = redisTokenService;
     }
 
     @Override
@@ -50,8 +54,13 @@ public class JwtFilter extends OncePerRequestFilter {
 //            username = jwtService.extractUserName(token);
             token = authHeader.substring(7);
 
-            //check blacklisted
-            if (tokenBlacklistedService.isBlacklisted(token)) {
+            //check blacklisted:through database
+//            if (tokenBlacklistedService.isBlacklisted(token)) {
+//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                response.getWriter().write("token revoked! please login again with credentials");
+//                return;
+//            }
+            if (redisTokenService.isBlacklisted(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("token revoked! please login again with credentials");
                 return;

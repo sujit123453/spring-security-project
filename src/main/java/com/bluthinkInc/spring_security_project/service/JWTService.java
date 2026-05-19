@@ -19,4 +19,5 @@ public interface JWTService {
     boolean isTokenExpired(String token);
     Date extractExpiration(String token);
     String extractTokenType(String token);
+    String extractUsername(String token);
 }

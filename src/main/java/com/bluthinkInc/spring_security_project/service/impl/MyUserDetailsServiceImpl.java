@@ -1,5 +1,6 @@
 package com.bluthinkInc.spring_security_project.service.impl;
 
+import com.bluthinkInc.spring_security_project.model.UserPrincipal;
 import com.bluthinkInc.spring_security_project.model.Users;
 import com.bluthinkInc.spring_security_project.repo.UserRepo;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,7 +33,6 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
         if (role == null || role.isEmpty()) {
             role = "USER";
         }
-
         return new org.springframework.security.core.userdetails.User(
                 user.getName(),
                 user.getPassword(),

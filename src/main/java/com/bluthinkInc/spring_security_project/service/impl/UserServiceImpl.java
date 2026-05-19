@@ -5,6 +5,9 @@ import com.bluthinkInc.spring_security_project.dto.LoginResponse;
 import com.bluthinkInc.spring_security_project.dto.customResponse.UserResponseEntity;
 import com.bluthinkInc.spring_security_project.model.Users;
 import com.bluthinkInc.spring_security_project.repo.UserRepo;
+import com.bluthinkInc.spring_security_project.service.JWTService;
+import com.bluthinkInc.spring_security_project.service.RedisTokenService;
+import com.bluthinkInc.spring_security_project.service.RefreshTokenService;
 import com.bluthinkInc.spring_security_project.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,14 +19,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepo repo;
-    private final RefreshTokenServiceImpl refreshTokenService;
-    private final JWTServiceImpl jwtService;
+    private final RefreshTokenService refreshTokenService;
+    private final JWTService jwtService;
+    private final RedisTokenService redisTokenService;
     AuthenticationManager authManager;
-    public UserServiceImpl(UserRepo repo, RefreshTokenServiceImpl refreshTokenService, JWTServiceImpl jwtService, AuthenticationManager authManager){
+    public UserServiceImpl(UserRepo repo, RefreshTokenService refreshTokenService,
+                           JWTService jwtService, AuthenticationManager authManager
+                           , RedisTokenService redisTokenService){
         this.repo = repo;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
         this.authManager = authManager;
+        this.redisTokenService = redisTokenService;
     }
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -34,7 +41,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(encoder.encode(user.getPassword()));
         Users savedUser = repo.save(user);
-
+        System.out.println("user saved successfully");
         return new UserResponseEntity<>(
                 "registered successfully",
                 200,
@@ -52,6 +59,10 @@ public class UserServiceImpl implements UserService {
                 String refreshToken = jwtService.generateRefreshToken(user.getName());
 
                 refreshTokenService.save(dbUser.getName(), refreshToken);
+                redisTokenService.saveRefreshToken(
+                        dbUser.getName(),
+                        refreshToken
+                );
                 return new LoginResponse(
                         accessToken,
                         refreshToken,
