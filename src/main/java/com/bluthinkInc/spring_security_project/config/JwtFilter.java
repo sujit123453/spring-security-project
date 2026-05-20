@@ -4,7 +4,6 @@ import com.bluthinkInc.spring_security_project.service.JWTService;
 import com.bluthinkInc.spring_security_project.service.RedisTokenService;
 import com.bluthinkInc.spring_security_project.service.TokenBlacklistedService;
 import com.bluthinkInc.spring_security_project.service.impl.MyUserDetailsServiceImpl;
-import com.bluthinkInc.spring_security_project.service.impl.RedisTokenServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

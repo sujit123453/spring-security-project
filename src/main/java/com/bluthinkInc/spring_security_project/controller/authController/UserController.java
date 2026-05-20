@@ -56,8 +56,7 @@ public class UserController {
 //    public ResponseEntity<UserResponseEntity<?>> logoutController(Authentication authentication,
 //                                                                  HttpServletRequest request) {
 //        String userName = authentication.getName();
-//        //delete refresh token form db
-//        refreshTokenService.logout(userName);
+//        //delete refresh token form db refreshTokenService.logout(userName);
 //        //extract access token
 //        String token = request.getHeader("Authorization");
 //

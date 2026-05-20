@@ -1,6 +1,7 @@
 package com.bluthinkInc.spring_security_project.service.impl;
 
 import com.bluthinkInc.spring_security_project.customExceptions.UserNotFoundException;
+import com.bluthinkInc.spring_security_project.dto.EmailEvent;
 import com.bluthinkInc.spring_security_project.dto.LoginResponse;
 import com.bluthinkInc.spring_security_project.dto.customResponse.UserResponseEntity;
 import com.bluthinkInc.spring_security_project.model.Users;
@@ -9,6 +10,7 @@ import com.bluthinkInc.spring_security_project.service.JWTService;
 import com.bluthinkInc.spring_security_project.service.RedisTokenService;
 import com.bluthinkInc.spring_security_project.service.RefreshTokenService;
 import com.bluthinkInc.spring_security_project.service.UserService;
+import com.bluthinkInc.spring_security_project.service.rabbitmq.producer.EmailProducer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +25,16 @@ public class UserServiceImpl implements UserService {
     private final JWTService jwtService;
     private final RedisTokenService redisTokenService;
     AuthenticationManager authManager;
+    private final EmailProducer emailProducer;
     public UserServiceImpl(UserRepo repo, RefreshTokenService refreshTokenService,
                            JWTService jwtService, AuthenticationManager authManager
-                           , RedisTokenService redisTokenService){
+                           , RedisTokenService redisTokenService,EmailProducer emailProducer){
         this.repo = repo;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
         this.authManager = authManager;
         this.redisTokenService = redisTokenService;
+        this.emailProducer = emailProducer;
     }
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -41,6 +45,13 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(encoder.encode(user.getPassword()));
         Users savedUser = repo.save(user);
+        //Create email event
+        EmailEvent event = new EmailEvent(
+                savedUser.getEmail(),
+                savedUser.getName()
+        );
+        //send event to rabbitmq
+        emailProducer.sendEmailEvent(event);
         System.out.println("user saved successfully");
         return new UserResponseEntity<>(
                 "registered successfully",
@@ -68,6 +79,7 @@ public class UserServiceImpl implements UserService {
                         refreshToken,
                         dbUser.getId(),
                         dbUser.getName(),
+                        dbUser.getEmail(),
                         dbUser.getRole()
                 );
             }

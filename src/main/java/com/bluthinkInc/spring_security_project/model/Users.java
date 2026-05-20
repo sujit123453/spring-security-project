@@ -18,7 +18,7 @@ public class Users {
     private Integer id;
     private String name;
     private String password;
-
+    private String email;
 
     private String role;
 }
